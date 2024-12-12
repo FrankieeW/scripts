@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Display Correct Metadata Comments
 // @namespace    https://blog.frankie.science
-// @version      1.5
-// @description  Parse and display metadata comments without crossing boundaries
+// @version      1.6
+// @description  Parse and display metadata comments with toggleable OFFERDOCS
 // @author       Frankie
 // @match        *://*/*
 // @grant        none
@@ -60,15 +60,29 @@
         // 遍历每条注释内容并显示
         metadataList.forEach((metadata, index) => {
             const offerDocsList = metadata.offerDocsRaw.split('|');
+            const offerDocsContent = `
+                <ul>
+                    ${offerDocsList.map(doc => `<li>${doc}</li>`).join('')}
+                </ul>
+                <b>Description:</b> ${metadata.offerDocsDesc}
+            `;
+
+            // 每个 OFFERDOCS 块的 HTML
+            const offerDocsHTML = `
+                <div>
+                    <b>OFFERDOCS:</b> 
+                    <button style="margin-left: 5px; font-size: 12px;" class="toggle-button">Hide</button>
+                    <div class="offer-docs-content" style="margin-top: 5px;">
+                        ${offerDocsContent}
+                    </div>
+                </div>
+            `;
+
             metadataBox.innerHTML += `
                 <div style="margin-bottom: 10px;">
                     <b>Comment #${index + 1}</b><br>
                     <b>Docs:</b> ${metadata.docs}<br>
-                    <b>OFFERDOCS:</b>
-                    <ul>
-                        ${offerDocsList.map(doc => `<li>${doc}</li>`).join('')}
-                    </ul>
-                    <b>OFFERDOCS Description:</b> ${metadata.offerDocsDesc}<br>
+                    ${offerDocsHTML}
                     <b>DALS:</b> ${metadata.dals}
                 </div>
             `;
@@ -76,5 +90,20 @@
 
         // 将浮动窗口添加到页面
         document.body.appendChild(metadataBox);
+
+        // 添加隐藏/显示功能
+        const toggleButtons = metadataBox.querySelectorAll('.toggle-button');
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                if (content.style.display === 'none') {
+                    content.style.display = 'block';
+                    button.textContent = 'Hide';
+                } else {
+                    content.style.display = 'none';
+                    button.textContent = 'Show';
+                }
+            });
+        });
     }
 })();
