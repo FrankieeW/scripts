@@ -6,7 +6,8 @@
 // @author       Frankie
 // @match        *://*/*
 // @grant        none
-// @updateURL    https://blog.frankie.science/scripts/ox_mate.js
+// @downloadURL  https://raw.githubusercontent.com/FrankieeW/scripts/refs/heads/main/ox_mate.js
+// @updateURL    https://raw.githubusercontent.com/FrankieeW/scripts/refs/heads/main/ox_mate.js
 // ==/UserScript==
 
 (function () {
